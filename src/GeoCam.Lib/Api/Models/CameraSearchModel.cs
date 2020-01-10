@@ -1,4 +1,4 @@
-﻿namespace GeoCam.Api.Controllers.Cameras.Models
+﻿namespace GeoCam.Api.Models
 {
 	public class CameraSearchModel
 	{
