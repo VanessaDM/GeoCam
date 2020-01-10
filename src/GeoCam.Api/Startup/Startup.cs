@@ -59,6 +59,7 @@ namespace GeoCam.Api.Startup
 			//
 			// Dependency Injection
 			//
+			services.AddScoped<Services.ImportService.IImportService, Services.ImportService.ImportService>();
 
 			//
 			// Swagger
