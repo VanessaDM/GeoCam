@@ -14,7 +14,8 @@ namespace GeoCam.Cli.Search
 		/// GeoCam - CLI Demo Application
 		/// </summary>
 		/// <param name="name">Word or phrase to search for in the camera description</param>
-		private static async Task<int> Main(string name)
+		/// <param name="apiEndpoint">Base endpoint URI for the web API (e.g. http://geoapi.example.com/api/v1)</param>
+		private static async Task<int> Main(string name, string apiEndpoint)
 		{
 			//
 			// Configuration
@@ -24,6 +25,13 @@ namespace GeoCam.Cli.Search
 					.Build();
 
 			var appSettings = configuration.Get<Configuration.AppSettings>();
+
+			// *TODO: handle this more cleanly
+			if (!String.IsNullOrEmpty(apiEndpoint))
+			{
+				appSettings.ApiEndpoint = apiEndpoint;
+			}
+
 			if (!Uri.IsWellFormedUriString(appSettings.ApiEndpoint, UriKind.Absolute))
 			{
 				Console.WriteLine("Invalid API endpoint configuration.");
@@ -36,13 +44,13 @@ namespace GeoCam.Cli.Search
 			List<CameraModel> searchResults = null;
 			{
 				using HttpClientHandler httpClientHandler = new HttpClientHandler();
-#if DEBUG
+//#if DEBUG
 				// Don't perform SSL validation on localhost addresses
 				httpClientHandler.ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) =>
 					{
 						return (sender.RequestUri.IsLoopback) ? true : System.Net.Security.SslPolicyErrors.None == sslPolicyErrors;
 					};
-#endif // DEBUG
+//#endif // DEBUG
 
 				using (var httpClient = new HttpClient(httpClientHandler))
 				{
