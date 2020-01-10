@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GeoCam.Cli.Search": {
+      "commandName": "Project",
+      "commandLineArgs": "--name Neude"
+    }
+  }
+}
