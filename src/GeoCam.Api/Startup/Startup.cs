@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace GeoCam.Api.Startup
 {
@@ -13,16 +16,59 @@ namespace GeoCam.Api.Startup
 			Configuration = configuration;
 		}
 
-		public IConfiguration Configuration { get; }
-
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers();
+			//
+			// Configuration
+			//
+			var appSettings = Configuration.GetSection("App").Get<Configuration.AppSettings>();
+			services
+				.Configure<Configuration.AppSettings>(Configuration.GetSection("App"))
+				.Configure<Configuration.SwaggerInfoSettings>(Configuration.GetSection("Swagger"));
+
+			//
+			// API + versioning
+			//
+			services
+				.AddControllers();
+
+			services
+				.AddApiVersioning(options =>
+					{
+						options.ReportApiVersions = true;
+					})
+				.AddVersionedApiExplorer(options =>
+					{
+						// Format version as 'v'major[.minor][-status]
+						options.GroupNameFormat = "'v'VVV";
+
+						options.SubstituteApiVersionInUrl = true;
+					});
+
+			//
+			// Dependency Injection
+			//
+
+			//
+			// Swagger
+			//
+			if (appSettings.EnableSwagger)
+			{
+				services.AddTransient<IConfigureOptions<Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions>, Configuration.ConfigureSwaggerOptions>();
+				services.AddSwaggerGen(options =>
+					{
+						// Set the comments path for the Swagger JSON and UI
+						var xmlFile = $"{typeof(Startup).GetTypeInfo().Assembly.GetName().Name}.xml";
+						var xmlPath = System.IO.Path.Combine(System.AppContext.BaseDirectory, xmlFile);
+						options.IncludeXmlComments(xmlPath);
+
+						// Use full schema names to avoid v1/v2/v3 schema collisions see https://github.com/domaindrivendev/Swashbuckle/issues/442
+						options.CustomSchemaIds(type => type.FullName);
+					});
+			}
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptions<Configuration.AppSettings> appSettings, IApiVersionDescriptionProvider provider)
 		{
 			if (env.IsDevelopment())
 			{
@@ -36,9 +82,35 @@ namespace GeoCam.Api.Startup
 			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
+				{
+					endpoints.MapControllers();
+				});
+
+			//
+			// Swagger
+			//
+			if (appSettings.Value.EnableSwagger)
 			{
-				endpoints.MapControllers();
-			});
+				app.UseSwagger(options =>
+					{
+					});
+				app.UseSwaggerUI(options =>
+					{
+						// Build a swagger endpoint for each discovered API version
+						foreach (var description in provider.ApiVersionDescriptions)
+							options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+						options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+						options.DisplayRequestDuration();
+						options.EnableDeepLinking();
+						options.EnableFilter();
+					});
+			}
 		}
+
+		#region Properties
+
+		public IConfiguration Configuration { get; }
+
+		#endregion
 	}
 }
