@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,6 +44,16 @@ namespace GeoCam.Api.Startup
 						options.GroupNameFormat = "'v'VVV";
 
 						options.SubstituteApiVersionInUrl = true;
+					});
+
+			//
+			// Data access
+			//
+			var dataAccessSettings = Configuration.GetSection("DataAccess").Get<Configuration.DataAccessSettings>();
+			services
+				.AddDbContext<DataAccess.GeoCamDbContext>(options =>
+					{
+						options.UseSqlite(dataAccessSettings.ToConnectionString(), sqlLiteOptions => sqlLiteOptions.MigrationsAssembly("GeoCam.Api.Migrations"));
 					});
 
 			//
