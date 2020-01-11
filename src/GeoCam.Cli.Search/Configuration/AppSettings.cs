@@ -2,6 +2,6 @@
 {
 	public class AppSettings
 	{
-		public string ApiEndpoint { get; set; }
+		public Api.Clients.ApiSettings Api { get; set; }
 	}
 }

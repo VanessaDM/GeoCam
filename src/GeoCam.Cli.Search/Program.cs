@@ -1,4 +1,5 @@
-﻿using GeoCam.Api.Models;
+﻿using GeoCam.Api.Clients;
+using GeoCam.Api.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -29,10 +30,10 @@ namespace GeoCam.Cli.Search
 			// *TODO: handle this more cleanly
 			if (!String.IsNullOrEmpty(apiEndpoint))
 			{
-				appSettings.ApiEndpoint = apiEndpoint;
+				appSettings.Api.Endpoint = apiEndpoint;
 			}
 
-			if (!Uri.IsWellFormedUriString(appSettings.ApiEndpoint, UriKind.Absolute))
+			if (!Uri.IsWellFormedUriString(appSettings.Api.Endpoint, UriKind.Absolute))
 			{
 				Console.WriteLine("Invalid API endpoint configuration.");
 				return -1;
@@ -56,7 +57,7 @@ namespace GeoCam.Cli.Search
 				{
 					try
 					{
-						var cameraClient = new Api.CameraClient(Microsoft.Extensions.Options.Options.Create(appSettings), httpClient);
+						var cameraClient = new CameraClient(Microsoft.Extensions.Options.Options.Create(appSettings.Api), httpClient);
 						searchResults = await cameraClient.SearchAsync(new CameraSearchModel() { Name = name });
 					}
 					catch (Exception ex)

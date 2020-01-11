@@ -5,7 +5,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace GeoCam.Cli.Search.Api
+namespace GeoCam.Api.Clients
 {
 	public static class ApiHelper
 	{
