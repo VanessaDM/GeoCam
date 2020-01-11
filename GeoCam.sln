@@ -15,7 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{CCC4CA29-58D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoCam.Lib", "src\GeoCam.Lib\GeoCam.Lib.csproj", "{866B0AF4-6142-4FF5-992C-6A2CB69F9B71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoCam.Api.Migrations", "src\GeoCam.Api.Migrations\GeoCam.Api.Migrations.csproj", "{B7A182E5-4AEA-4257-9F8B-256B40B2733D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoCam.Api.Migrations", "src\GeoCam.Api.Migrations\GeoCam.Api.Migrations.csproj", "{B7A182E5-4AEA-4257-9F8B-256B40B2733D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{B33BFB3E-9F7D-43E1-9D1C-74383FBE4FF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoCam.Web", "src\GeoCam.Web\GeoCam.Web.csproj", "{7FA503A8-1DA0-492C-85CB-FD1D8A49D654}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,10 @@ Global
 		{B7A182E5-4AEA-4257-9F8B-256B40B2733D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7A182E5-4AEA-4257-9F8B-256B40B2733D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7A182E5-4AEA-4257-9F8B-256B40B2733D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FA503A8-1DA0-492C-85CB-FD1D8A49D654}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FA503A8-1DA0-492C-85CB-FD1D8A49D654}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FA503A8-1DA0-492C-85CB-FD1D8A49D654}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FA503A8-1DA0-492C-85CB-FD1D8A49D654}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +56,7 @@ Global
 		{6AF2C477-FF96-4892-8741-73D754DD7E89} = {2D6BF458-C0A0-4F28-BA76-D046EFA9FAA9}
 		{866B0AF4-6142-4FF5-992C-6A2CB69F9B71} = {CCC4CA29-58D4-4CAE-897C-C6B28D91F98F}
 		{B7A182E5-4AEA-4257-9F8B-256B40B2733D} = {9B2CD1F9-34A9-4A9B-8C46-2C8A85A08DCD}
+		{7FA503A8-1DA0-492C-85CB-FD1D8A49D654} = {B33BFB3E-9F7D-43E1-9D1C-74383FBE4FF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F987F8F0-628C-49C0-8D5E-D88241038F41}
