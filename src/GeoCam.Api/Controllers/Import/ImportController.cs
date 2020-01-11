@@ -41,6 +41,6 @@ namespace GeoCam.Api.Controllers.Import
 
 		protected readonly ILogger _logger;
 
-		#endregion Fields
+		#endregion
 	}
 }

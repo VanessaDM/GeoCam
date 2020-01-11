@@ -38,7 +38,7 @@ namespace GeoCam.Api.Controllers.Cameras
 			else
 				cameras = await dbContext.Cameras.ToListAsync();
 
-			return Ok(cameras.Select(c => new Models.CameraModel() { Name = c.Name, Longitude = c.Longitude, Latitude = c.Latitude }));
+			return Ok(cameras.Select(c => new Models.CameraModel() { Name = c.Name, Number = c.Number, Longitude = c.Longitude, Latitude = c.Latitude }));
 		}
 
 		#region Fields

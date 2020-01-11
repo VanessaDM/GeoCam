@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GeoCam.Api.Services.ImportService
@@ -50,7 +51,12 @@ namespace GeoCam.Api.Services.ImportService
 				// *TODO: refactor with yield  + use automapper for model mapping + better insert conflict handling
 				try
 				{
-					await _dbContext.Cameras.AddAsync(new Camera() { Name = camera.Camera, Longitude = camera.Longitude, Latitude = camera.Latitude });
+					await _dbContext.Cameras.AddAsync(new Camera() {
+						Name = camera.Camera,
+						Number = GetCameraNumberFromName(camera.Camera),
+						Longitude = camera.Longitude,
+						Latitude = camera.Latitude
+					});
 					await _dbContext.SaveChangesAsync();
 				}
 				catch (Microsoft.EntityFrameworkCore.DbUpdateException ex) when (ex.InnerException is Microsoft.Data.Sqlite.SqliteException innerEx && innerEx.SqliteErrorCode == 19)
@@ -66,11 +72,35 @@ namespace GeoCam.Api.Services.ImportService
 			return importResult;
 		}
 
+		#region Helper functions
+
+		// *TODO: unit test
+		protected static int? GetCameraNumberFromName(string cameraName)
+		{
+			var rgxMatch = _rgxCameraNumber.Match(cameraName);
+			if (!rgxMatch.Success)
+				return null;
+
+			var cameraNumberString = rgxMatch.Groups["Number"]?.Value;
+			if (!Int32.TryParse(cameraNumberString, out int cameraNumber))
+				return null;
+			return cameraNumber;
+		}
+
+		#endregion
+
 		#region Fields
 
 		protected readonly GeoCamDbContext _dbContext;
 		protected readonly ILogger _logger;
+		protected static readonly Regex _rgxCameraNumber = new Regex(rgxCameraNumberPattern, RegexOptions.Compiled | RegexOptions.Singleline);
 
-		#endregion Fields
+		#endregion
+
+		#region Constants
+
+		protected const string rgxCameraNumberPattern = @"^[A-Z]{3}-[A-Z]{2}-(?<Number>[0-9]{1,})";
+
+		#endregion
 	}
 }

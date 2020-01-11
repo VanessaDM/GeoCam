@@ -92,9 +92,9 @@ namespace GeoCam.Cli.Search
 
 		protected static IEnumerable<string> FormatSearchResults(ICollection<CameraModel> searchResults)
 		{
-			// *TODO: first column of expected output still missing - extract with regular expression (or supposed to be db id?)
 			Func<CameraModel, string>[] selectors = new Func<CameraModel, string>[]
 				{
+					x => x.Number?.ToString() ?? "null",
 					x => x.Name,
 					x => x.Latitude.ToString(),
 					x => x.Longitude.ToString(),

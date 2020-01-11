@@ -13,17 +13,28 @@ namespace GeoCam.Web
 			Configuration = configuration;
 		}
 
-		public IConfiguration Configuration { get; }
-
-		// This method gets called by the runtime. Use this method to add services to the container.
-		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			//
+			// Configuration
+			//
+			services
+				.Configure<Api.Clients.ApiSettings>(Configuration.GetSection("Api"));
+
+			//
+			// Blazor
+			//
 			services.AddRazorPages();
 			services.AddServerSideBlazor();
+
+			//
+			// Dependency Injection
+			//
+			services
+				.AddHttpClient<Api.Clients.ICameraClient, Api.Clients.CameraClient>();
+
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -48,5 +59,11 @@ namespace GeoCam.Web
 				endpoints.MapFallbackToPage("/_Host");
 			});
 		}
+
+		#region Properties
+
+		public IConfiguration Configuration { get; }
+
+		#endregion
 	}
 }

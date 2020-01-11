@@ -25,7 +25,7 @@ namespace GeoCam.Api.Configuration
 			}
 		}
 
-		#endregion IConfigureOptions implementation
+		#endregion
 
 		#region Fields
 
@@ -33,6 +33,6 @@ namespace GeoCam.Api.Configuration
 
 		protected readonly SwaggerInfoSettings _swaggerInfoSettings;
 
-		#endregion Fields
+		#endregion
 	}
 }

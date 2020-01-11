@@ -1,0 +1,29 @@
+﻿@inherits CameraTableBase
+
+<table id="@Id">
+    <thead>
+        <tr>
+            <th colspan="4">@Title</th>
+        </tr>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Cameras != null)
+        {
+            @foreach (var camera in Cameras)
+            {
+                <tr>
+                    <td>@camera.Number</td>
+                    <td>@camera.Name</td>
+                    <td>@camera.Latitude</td>
+                    <td>@camera.Longitude</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
