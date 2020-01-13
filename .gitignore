@@ -340,6 +340,6 @@ ASALocalRun/
 healthchecksdb
 
 # Project specific ignores
-GeoCam.db
+#GeoCam.db
 src/GeoCam.Web/wwwroot/ts/*.js
 src/GeoCam.Web/wwwroot/ts/*.js.map
